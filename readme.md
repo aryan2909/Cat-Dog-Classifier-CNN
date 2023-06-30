@@ -32,6 +32,16 @@ This repository contains scripts for training and predicting with a cat and dog 
 
 - **Displaying the Prediction**: The prediction result is printed, indicating whether the image is classified as a cat or a dog.
 
+## Class Activation Mapping (CAM)
+
+The repository also includes the implementation of Class Activation Mapping (CAM) to visualize the important regions of the input image that contribute to the model's prediction. The CAM outputs are saved as numpy files.
+
+To use the CAM functionality, follow these steps:
+1. Ensure that you have trained the model using `train.py` and have the trained model file (`cat_dog_classifier.h5`) available.
+2. Use the `predict_cam.py` script to predict an image and obtain the CAM output.
+3. The CAM output will be saved as a numpy file in the `cam_outputs` directory.
+
+
 ## Why the Model Works and Aspects Worked Upon
 
 - **Transfer Learning**: The model utilizes transfer learning by leveraging the pre-trained VGG16 model. The VGG16 model is trained on a large dataset and has learned to extract meaningful features from images. By using the pre-trained weights and freezing the layers of the base model, we benefit from the learned representations, enabling us to train a new classification head specifically for cat and dog classification.

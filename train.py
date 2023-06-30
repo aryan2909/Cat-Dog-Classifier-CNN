@@ -1,24 +1,26 @@
 import ssl
 from tensorflow.keras.applications import VGG16
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Flatten, GlobalAveragePooling2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-
 base_model = VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
 
 
-model = Sequential()
-model.add(base_model)
-model.add(Flatten())
-model.add(Dense(256, activation='relu'))
-model.add(Dense(1, activation='sigmoid'))
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+
+
+x = Dense(256, activation='relu')(x)
+predictions = Dense(1, activation='sigmoid')(x)
+
+
+model = Model(inputs=base_model.input, outputs=predictions)
 
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
 
 datagen = ImageDataGenerator(
     rotation_range=20,
@@ -29,7 +31,6 @@ datagen = ImageDataGenerator(
     horizontal_flip=True,
     fill_mode='nearest'
 )
-
 
 train_generator = datagen.flow_from_directory(
     'train/',
